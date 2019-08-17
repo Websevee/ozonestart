@@ -99,7 +99,6 @@ function actionPage() {
         max = document.getElementById('max'),
         search = document.querySelector('.search-wrapper_input'),
         searchBtn = document.querySelector('.search-btn');
-
     // фильтр по акции
 
     discountCheckBox.addEventListener('click', filter);
@@ -110,6 +109,11 @@ function actionPage() {
     max.addEventListener('change', filter);
 
     function filter() {
+        const cards = document.querySelectorAll('.goods .card'),
+            discountCheckBox = document.getElementById('discount-checkbox'),
+            min = document.getElementById('min'),
+            max = document.getElementById('max');
+        
         cards.forEach((card) => {
             const cardPrice = card.querySelector('.card-price')
             const price = parseFloat(cardPrice.textContent);
@@ -118,8 +122,6 @@ function actionPage() {
             if ((min.value && price < min.value) || (max.value && price > max.value)) {
                 card.parentNode.style.display = 'none';
             } else if (discountCheckBox.checked && !discount) {
-                card.parentNode.style.display = 'none'
-            } else if (!searchText.test(title.textContent)) {
                 card.parentNode.style.display = 'none'
             } else {
                 card.parentNode.style.display = '';
@@ -208,7 +210,9 @@ function renderCatalog() {
         catalogList.appendChild(li);
     });
 
-    catalogBtn.addEventListener('click', () => {
+    const allLi = catalogList.querySelectorAll('li');
+
+    catalogBtn.addEventListener('click', (event) => {
         if (catalogWrapper.style.display) {
             catalogWrapper.style.display = '';
         } else {
@@ -222,8 +226,15 @@ function renderCatalog() {
                 } else {
                     card.parentNode.style.display = 'none';
                 };
-            })
-        }
+            });
+            allLi.forEach((elem) => {
+                if (elem === event.target) {
+                    elem.classList.add('active');
+                } else {
+                    elem.classList.remove('active');
+                }
+            });
+        };
     });
 };
 
